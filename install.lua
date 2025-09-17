@@ -1,5 +1,5 @@
 local base = "https://raw.githubusercontent.com/TuShaggy/CCDR-Automatic/refs/heads/main/"
-local api_base = "https://api.github.com/repos/TuShaggy/CCDR-Automatic/contents/"
+local api_base = "https://api.github.com/repos/TuShaggy/CCDR-Automatic/contents"
 
 local function wget(url, filename, dir, nooverride)
     if nooverride and fs.exists(dir..'/'..filename) then return end
@@ -17,7 +17,7 @@ end
 
 local function getRepoFiles(path)
     path = path or ""
-    local url = api_base .. path
+    local url = path == "" and api_base or api_base .. "/" .. path
     local res = http.get(url)
     if not res then 
         printError("Failed to get repo contents from: " .. url)

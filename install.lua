@@ -27,7 +27,9 @@ local filelist = {
     { file = "constructor", dir = "lib" },
     { file = "draconicreactor", dir = "lib" },
     { file = "drmon", dir = "lib" },
+    { file = "monutil", dir = "lib" },
     { file = "util", dir = "lib" },
+    { file = "impl_require", dir = "lib" },
 }
 
 print("Starting download from GitHub repository...")

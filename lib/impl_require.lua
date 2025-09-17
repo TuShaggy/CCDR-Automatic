@@ -1,24 +1,32 @@
+-- Implementation of require function for ComputerCraft
+local loaded = {}
+local loading = {}
 
--- implement require for older versions (e.g. 1.7.10)
-if not require then
-    _G.requires = {}
-
-    --- @param modname string
-    _G.require = function(modname)
-        if requires[modname] then return requires[modname] end
-
-        local fd = fs.open(modname, "r")
-        if not fd then fd = fs.open(modname..".lua", "r") end
-        if not fd then error("Cannot find "..modname) end
-
-        local content = fd.readAll()
-        fd.close()
-
-        local fn, err = load(content, modname, "t")
-        if not fn or err then error("Failed to load "..modname..": "..err) end
-
-        local res = fn()
-        requires[modname] = res
-        return res
+function require(name)
+    if loaded[name] then
+        return loaded[name]
     end
+    
+    if loading[name] then
+        error("circular dependency detected: " .. name, 2)
+    end
+    
+    loading[name] = true
+    
+    local path = name:gsub("%.", "/") .. ".lua"
+    
+    if not fs.exists(path) then
+        error("module '" .. name .. "' not found", 2)
+    end
+    
+    local func, err = loadfile(path)
+    if not func then
+        error("error loading module '" .. name .. "': " .. err, 2)
+    end
+    
+    local result = func()
+    loaded[name] = result or true
+    loading[name] = nil
+    
+    return loaded[name]
 end

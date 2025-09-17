@@ -1,4 +1,4 @@
-local base = "https://raw.githubusercontent.com/frostice482/drctrl/refs/heads/master/"
+local base = "https://raw.githubusercontent.com/TuShaggy/CCDR-Automatic/refs/heads/main/"
 
 local function wget(url, filename, dir, nooverride)
     if nooverride and fs.exists(dir..'/'..filename) then return end

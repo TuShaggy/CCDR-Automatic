@@ -1,5 +1,28 @@
 local constructor = require 'lib/constructor'
 
+local M = {}
+
+--- @param perName string
+--- @param types string[]
+--- @param optional? boolean
+function M.getPeripheral(perName, types, optional)
+    local per = peripheral.wrap(perName)
+    if not per then
+        if optional then return nil end
+        error("peripheral " .. perName .. " not found", 2)
+    end
+
+    for i = 1, #types do
+        if per.getType() == types[i] then
+            return per
+        end
+    end
+
+    if optional then return nil end
+    local tab = table.concat(types, ", ")
+    error("per " .. perName .. " expects " .. tab .. " but got " .. per.getType(), 2)
+end
+
 --- @class MonUtilTouchListener
 --- @field x1 number
 --- @field x2 number
@@ -155,4 +178,6 @@ local MonUtil = constructor.createConstructor(MonUtilPrototype, function (self, 
     for key, value in pairs(arg) do target[key] = value end
 end)
 
-return MonUtil
+M.MonUtil = MonUtil
+
+return M

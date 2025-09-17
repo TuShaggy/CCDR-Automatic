@@ -1,2 +1,0 @@
-# CCDR Automatic
-

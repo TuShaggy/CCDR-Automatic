@@ -12,15 +12,21 @@ function M.getPeripheral(perName, types, optional)
         error("peripheral " .. perName .. " not found", 2)
     end
 
+    if not per.getType then
+        if optional then return nil end
+        error("peripheral " .. perName .. " does not have getType method", 2)
+    end
+
+    local perType = per.getType()
     for i = 1, #types do
-        if per.getType() == types[i] then
+        if perType == types[i] then
             return per
         end
     end
 
     if optional then return nil end
     local tab = table.concat(types, ", ")
-    error("per " .. perName .. " expects " .. tab .. " but got " .. per.getType(), 2)
+    error("per " .. perName .. " expects " .. tab .. " but got " .. perType, 2)
 end
 
 --- @class MonUtilTouchListener

@@ -34,9 +34,10 @@ local function findPeripherals(types)
     local found = {}
     for _, name in ipairs(names) do
         local per = peripheral.wrap(name)
-        if per then
+        if per and per.getType then
+            local perType = per.getType()
             for _, pType in ipairs(types) do
-                if per.getType() == pType then
+                if perType == pType then
                     table.insert(found, name)
                     break
                 end
